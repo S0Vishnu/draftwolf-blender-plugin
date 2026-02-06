@@ -6,6 +6,7 @@ import bpy
 
 from .path_utils import get_project_root
 from .state import SafeVersionList, StatusCache, UpdateState, check_app_status, check_login_status
+from .app_detection import is_app_installed
 from .history import load_version_history
 from .update import version_tuple_to_string
 from .constants import CURRENT_VERSION
@@ -143,11 +144,19 @@ def _draw_app_section(layout, app_running, is_logged_in):
     row.operator("draftwolf.refresh_status", text="", icon="FILE_REFRESH")
     row.operator("draftwolf.check_for_updates", text="", icon="WORLD")
     if not app_running:
-        box.label(text="App not detected", icon='ERROR')
-        box.label(text="Make sure DraftWolf is running")
-        row = box.row(align=True)
-        row.scale_y = 1.2
-        row.operator("draftwolf.download_app", text="Download App", icon="INTERNET")
+        installed = is_app_installed()
+        if not installed:
+            box.label(text="App not installed", icon='ERROR')
+            box.label(text="Install DraftWolf to connect")
+            row = box.row(align=True)
+            row.scale_y = 1.2
+            row.operator("draftwolf.download_app", text="Download App", icon="INTERNET")
+        else:
+            box.label(text="App not running", icon='ERROR')
+            box.label(text="Make sure DraftWolf is running")
+            row = box.row(align=True)
+            row.scale_y = 1.2
+            row.operator("draftwolf.open_app", text="Open DraftWolf", icon="URL")
         return
     if not is_logged_in:
         box.label(text="Please login to continue", icon='INFO')

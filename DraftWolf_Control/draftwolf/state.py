@@ -109,3 +109,19 @@ def status_worker():
             StatusCache.app_running = False
 
         _sleep_while_running(5.0)
+
+
+def run_once_sync_status():
+    """One-off health + auth/status check; updates StatusCache. Safe to call from main thread (e.g. Blender timer)."""
+    try:
+        res = send_request('/health')
+        is_running = bool(res and res.get('success'))
+        StatusCache.app_running = is_running
+        if is_running:
+            _apply_auth_status(send_request('/auth/status'))
+        else:
+            StatusCache.is_logged_in = False
+            StatusCache.username = None
+    except Exception as e:
+        print(f"DraftWolf one-off sync failed: {e}")
+        StatusCache.app_running = False

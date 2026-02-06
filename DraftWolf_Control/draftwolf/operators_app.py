@@ -11,6 +11,7 @@ from .api import send_request
 from .constants import CANNOT_CONNECT_APP, UNKNOWN_ERROR
 from .path_utils import get_project_root
 from .state import StatusCache
+from .app_detection import is_app_installed
 
 
 class object_ot_df_init(bpy.types.Operator):
@@ -120,6 +121,9 @@ class object_ot_df_refresh_status(bpy.types.Operator):
             else:
                 self.report({'INFO'}, "✓ App detected but not logged in")
         else:
-            self.report({'WARNING'}, "App not detected. Make sure DraftWolf is running.")
+            if is_app_installed():
+                self.report({'WARNING'}, "App not running. Make sure DraftWolf is running.")
+            else:
+                self.report({'WARNING'}, "App not installed. Download DraftWolf to connect.")
 
         return {'FINISHED'}
