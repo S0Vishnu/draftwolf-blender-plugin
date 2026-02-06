@@ -1,0 +1,18 @@
+schema_version = "1.0.0"
+
+id = "draftwolf_control"
+version = "1.0.0"
+name = "DraftWolf Control"
+tagline = "Version control for Blender with DraftWolf. Commit, restore, and manage versions of your Blender projects."
+maintainer = "S0Vishnu <vishnus.connect@gmail.com>"
+
+type = "add-on"
+website = "draftwolf.vercel.app"
+
+tags = ["Version Control", "Development"]
+
+blender_version_min = "2.80"
+
+license = [
+  "SPDX:GPL-2.0-or-later",
+]
